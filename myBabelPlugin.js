@@ -78,3 +78,7 @@ type表示节点类型，如FunctionDeclaration, Identifier, BinaryExpression等
 */
 
 
+// 插件的基本开发就是这样，说白了就是在ast在转换到源码的过程中，提供了访问
+                        // 各种语法的勾子函数（Visitor），我们在这些勾子函数中可以基于ast、path、state
+                        // 等做一些根据业务逻辑需要的操作，如修改、删除、增加等操作！！
+
