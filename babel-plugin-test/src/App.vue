@@ -3,14 +3,15 @@
 </template>
 
 <script>
-
+ 
 export default {
   name: 'App',
-  components: {
+  components: { 
   },
-  methods: {
+  methods: { 
     buttonClick() {
-      if(DEBUG) {
+      console.log('click'); 
+      if(DEBUG) { 
         console.log('开发环境下执行成功');
       }
     }

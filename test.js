@@ -3,16 +3,19 @@
 const { transformSync } = require("@babel/core");
 // 有了这个方法以后，我们就可以使用我们的插件了
 const codeString = `
-    if (DEBUG) {
-        // 在dev环境下执行
-        // 在prod环境下移出
-        add(1, 4);
+function buttonClick() {
+    /* global DEBUG */
+    if(DEBUG) { 
+      console.log('开发环境下执行成功');
     }
+  }
 `
 
 
 const babelTranformConfig = {
-    plugins: ['./myBabelPlugin.js']
+    plugins: [['./myBabelPlugin.js', {
+        isRemove: true
+    }]]
 }
 
 const res = transformSync(codeString, babelTranformConfig);

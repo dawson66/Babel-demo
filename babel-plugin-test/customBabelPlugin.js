@@ -12,7 +12,7 @@
 // }
 
 // babel 插件是node形式
-module.exports = ({types: t}) => {
+module.exports = ({ types: t }) => {
     // console.log(t)
     // 插件其实就是一个函数，返回一个对象，有其自己的形式，详情请看官网
     return {
@@ -29,12 +29,32 @@ module.exports = ({types: t}) => {
                     // 如，我们将 DEBUG 变为 string 类型，让if语句一直通行
                     const stringNode = t.stringLiteral('DEBUG');
                     path.replaceWith(stringNode);
-                    
+
                     // 这样 我们一个非常简易的babel plugin 就完成了，可以启动一个vue项目在里面验证一下
                 }
-                // 或者判断生产条件移除
-
             },
+            // 或者判断生产条件移除
+            // 注意：此时if的DEBUG标识符已经被转化成了StringLiteral
+            StringLiteral(path, state) {
+                const isDebug = path.node.value === 'DEBUG';
+                const parentIsIfStatement = t.isIfStatement(path.parentPath)
+                if (isDebug && parentIsIfStatement) {
+                    // 1. 确认是否为生产环境： 
+                    //    a. node环境变量 打包后启动服务测试 ok 
+                    //    b. 外界传参方式告诉是什么环境！那么插件如何获取外界参数呢？插件注册时，可以传参！！
+                    // 2. 移除节点
+                    // if (process.env.NODE_ENV === 'production') {
+                    //     path.parentPath.remove();
+                    // }
+                    console.log(state);
+                    if (state.opts.isRemove) {
+                        path.parentPath.remove();
+                        // 测试后发现好像不行，好像是/* global DEBUG */ 躲避eslint检查不行！!
+                        // 使用.eslintrc.js又会报 parse error token > 错误，以后遇到再解决吧
+                        // 插件的基本开发就是这样，说白了就是在ast和转换之间做修改、删除、增加等操作！！
+                    }
+                }
+            }
         }
     }
 }

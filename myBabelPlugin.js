@@ -35,6 +35,25 @@ module.exports = ({types: t}) => {
                 // 或者判断生产条件移除
 
             },
+            StringLiteral(path, state) {
+                const isDebug = path.node.value === 'DEBUG';
+                const parentIsIfStatement = t.isIfStatement(path.parentPath)
+                if (isDebug && parentIsIfStatement) {
+                    // 1. 确认是否为生产环境： 
+                    //    a. node环境变量 打包后启动服务测试 ok 
+                    //    b. 外界传参方式告诉是什么环境！那么插件如何获取外界参数呢？插件注册时，可以传参！！
+                    // 2. 移除节点
+                    
+                    // if (process.env.NODE_ENV === 'production') {
+                    //     path.parentPath.remove();
+                    // }
+                    // console.log(state);
+                    if (state.opts.isRemove) {
+                        console.log('remove');
+                        path.parentPath.remove();
+                    }
+                }
+            }
         }
     }
 }

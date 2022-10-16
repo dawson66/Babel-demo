@@ -2,5 +2,7 @@ module.exports = {
   presets: [
     '@vue/cli-plugin-babel/preset'
   ],
-  plugins: ['./customBabelPlugin.js']
+  plugins: [['./customBabelPlugin.js', {
+    isRemove: true
+  }]]
 }
